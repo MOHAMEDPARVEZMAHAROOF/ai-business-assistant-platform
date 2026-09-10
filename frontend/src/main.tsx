@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css'; // Remove or comment out this line if you don't have an index.css file
+// ❌ Remove or comment out this line:
+// import './index.css'; 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
