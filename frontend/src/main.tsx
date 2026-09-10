@@ -1,11 +1,40 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import React, { useRef } from 'react';
 
-import App from "./App";
-import "./styles.css";
+export function Dashboard() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    console.log("Selected file:", file);
+    // Call your upload API function here (e.g., uploadDocument(file))
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        style={{ display: 'none' }}
+        accept=".pdf,.txt,.docx"
+      />
+
+      {/* Main Hero Upload Button */}
+      <button className="primary-button" onClick={triggerFileInput}>
+        Upload a document ↗
+      </button>
+
+      {/* Lower Empty State Button */}
+      <button className="secondary-button" onClick={triggerFileInput}>
+        Choose a file
+      </button>
+    </div>
+  );
+}
