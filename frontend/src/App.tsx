@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
+import './App.css'; // Keep your original CSS file import here if you have one
 
-// Type cast import.meta to prevent TS2339 build failure on Vercel
 const API_BASE_URL = ((import.meta as any).env?.VITE_API_BASE_URL) || 'https://ai-business-assistant-platform.onrender.com';
 
 export default function App() {
@@ -32,7 +32,7 @@ export default function App() {
 
       if (response.ok) {
         const data = await response.json();
-        setUploadStatus(`Success: ${file.name} uploaded successfully!`);
+        setUploadStatus(`Success: ${file.name} uploaded!`);
         console.log('Upload response:', data);
       } else {
         setUploadStatus(`Upload failed with status code ${response.status}`);
@@ -46,9 +46,8 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>AI Business Assistant</h1>
-
+    <div className="shell">
+      {/* Hidden File Input */}
       <input
         type="file"
         ref={fileInputRef}
@@ -57,28 +56,67 @@ export default function App() {
         accept=".pdf,.txt,.docx"
       />
 
-      <button
-        onClick={handleUploadClick}
-        disabled={isUploading}
-        style={{
-          padding: '12px 24px',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          cursor: isUploading ? 'not-allowed' : 'pointer',
-          borderRadius: '8px',
-          backgroundColor: '#000',
-          color: '#fff',
-          border: 'none',
-        }}
-      >
-        {isUploading ? 'Uploading...' : 'Upload a document ↗'}
-      </button>
+      <aside className="sidebar">
+        {/* Your Sidebar Navigation Icons */}
+      </aside>
 
-      {uploadStatus && (
-        <p style={{ marginTop: '1rem', color: isUploading ? '#666' : '#000' }}>
-          {uploadStatus}
-        </p>
-      )}
+      <section className="content" id="workspace">
+        <header className="topbar">
+          <div className="user-avatar">MM</div>
+        </header>
+
+        <section className="hero-card">
+          <div className="hero-copy">
+            <span className="pill">YOUR PRIVATE KNOWLEDGE LAYER</span>
+            <h2>Ask better questions of every document.</h2>
+            <p>Upload policies, reports, and internal notes. Atlas will find the relevant context and show you where every answer came from.</p>
+            
+            {/* Attached Upload Handler */}
+            <button className="primary-button" onClick={handleUploadClick} disabled={isUploading}>
+              {isUploading ? 'Uploading...' : 'Upload a document ↗'}
+            </button>
+          </div>
+        </section>
+
+        <section className="stats">
+          <div className="stat-card">
+            <h4>DOCUMENTS</h4>
+            <p className="stat-number">{selectedFile ? '1' : '0'}</p>
+            <p className="stat-subtext">{selectedFile ? selectedFile.name : 'Upload your first source'}</p>
+          </div>
+          <div className="stat-card">
+            <h4>CONVERSATIONS</h4>
+            <p className="stat-number">0</p>
+            <p className="stat-subtext">Your questions will live here</p>
+          </div>
+          <div className="stat-card">
+            <h4>SOURCES CITED</h4>
+            <p className="stat-number">—</p>
+            <p className="stat-subtext">Grounded answers, not guesses</p>
+          </div>
+        </section>
+
+        <section className="empty-state" id="documents">
+          <div className="empty-state-card">
+            <div className="plus-icon">+</div>
+            <div>
+              <h3>Build your first source library</h3>
+              <p>Add a PDF or text document to make this workspace useful. The processing pipeline will extract, chunk, and index it for chat.</p>
+            </div>
+            
+            {/* Secondary Upload Button */}
+            <button className="secondary-button" onClick={handleUploadClick} disabled={isUploading}>
+              Choose a file
+            </button>
+          </div>
+        </section>
+
+        {uploadStatus && (
+          <div style={{ marginTop: '1rem', padding: '1rem', background: '#f5f5f5', borderRadius: '8px' }}>
+            <p>{uploadStatus}</p>
+          </div>
+        )}
+      </section>
     </div>
   );
 }
