@@ -32,12 +32,10 @@ export default function App() {
       if (response.ok) {
         const data = await response.json();
         setUploadStatus(`Success: ${file.name} uploaded!`);
-        console.log('Upload response:', data);
       } else {
         setUploadStatus(`Upload failed with status code ${response.status}`);
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
       setUploadStatus('Network error: Unable to reach backend server.');
     } finally {
       setIsUploading(false);
@@ -45,7 +43,18 @@ export default function App() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f3ef', fontFamily: 'sans-serif', margin: 0, padding: 0 }}>
+    <div style={{ 
+      display: 'flex', 
+      width: '100vw', 
+      height: '100vh', 
+      maxHeight: '100vh', 
+      overflow: 'hidden', 
+      backgroundColor: '#f4f3ef', 
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      margin: 0,
+      padding: 0,
+      boxSizing: 'border-box'
+    }}>
       {/* Hidden File Input */}
       <input
         type="file"
@@ -55,109 +64,141 @@ export default function App() {
         accept=".pdf,.txt,.docx"
       />
 
-      {/* Dark Left Sidebar */}
-      <aside style={{ width: '240px', backgroundColor: '#1a1d1a', color: '#fff', padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 'bold', fontSize: '1.1rem' }}>
-          <div style={{ width: '28px', height: '28px', backgroundColor: '#c8f560', color: '#1a1d1a', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900' }}>
+      {/* Dark Fixed Sidebar */}
+      <aside style={{ 
+        width: '240px', 
+        minWidth: '240px',
+        height: '100vh', 
+        backgroundColor: '#1f211f', 
+        color: '#fff', 
+        padding: '1.75rem 1.25rem', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '2.5rem',
+        boxSizing: 'border-box',
+        userSelect: 'none'
+      }}>
+        {/* Brand Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: '800', fontSize: '1.15rem', color: '#ffffff' }}>
+          <div style={{ width: '32px', height: '32px', backgroundColor: '#c8f560', color: '#1f211f', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '1rem' }}>
             A
           </div>
           Atlas Assist
         </div>
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', backgroundColor: '#2a2e2a', borderRadius: '8px', cursor: 'pointer', color: '#fff', fontWeight: '600' }}>
-            ✦ Workspace
+        {/* Navigation */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', padding: '0.75rem 1rem', backgroundColor: '#2f332f', borderRadius: '10px', cursor: 'pointer', color: '#fff', fontWeight: '600', fontSize: '0.9rem' }}>
+            <span style={{ color: '#c8f560', fontSize: '0.8rem' }}>✦</span> Workspace
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', borderRadius: '8px', cursor: 'pointer', color: '#a0a0a0' }}>
-            ≡ Documents
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', padding: '0.75rem 1rem', borderRadius: '10px', cursor: 'pointer', color: '#909490', fontSize: '0.9rem', fontWeight: '500' }}>
+            <span style={{ fontSize: '0.9rem' }}>≡</span> Documents
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', borderRadius: '8px', cursor: 'pointer', color: '#a0a0a0' }}>
-            🕒 History
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', padding: '0.75rem 1rem', borderRadius: '10px', cursor: 'pointer', color: '#909490', fontSize: '0.9rem', fontWeight: '500' }}>
+            <span style={{ fontSize: '0.85rem' }}>🕒</span> History
           </div>
         </nav>
       </aside>
 
-      {/* Main Content Workspace */}
-      <main style={{ flex: 1, padding: '2rem 3rem', overflowY: 'auto' }}>
+      {/* Bound Scrollable Workspace Content */}
+      <main style={{ 
+        flex: 1, 
+        height: '100vh', 
+        overflowY: 'auto', 
+        padding: '2.5rem 3.5rem', 
+        boxSizing: 'border-box',
+        overscrollBehavior: 'contain'
+      }}>
         {/* Top Header */}
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
           <div>
-            <span style={{ fontSize: '0.75rem', letterSpacing: '1px', fontWeight: 'bold', color: '#888' }}>AI BUSINESS ASSISTANT</span>
-            <h1 style={{ fontSize: '2.5rem', margin: '0.2rem 0 0 0', fontWeight: '800', color: '#1a1d1a' }}>Make sense of the work.</h1>
+            <span style={{ fontSize: '0.75rem', letterSpacing: '1px', fontWeight: '700', color: '#808480', textTransform: 'uppercase' }}>AI BUSINESS ASSISTANT</span>
+            <h1 style={{ fontSize: '2.75rem', margin: '0.2rem 0 0 0', fontWeight: '800', color: '#1a1d1a', letterSpacing: '-1px' }}>Make sense of the work.</h1>
           </div>
-          <div style={{ width: '36px', height: '36px', borderRadius: '50%', border: '1px solid #ccc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 'bold', color: '#555' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1px solid #d8d6d0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: '700', color: '#555', backgroundColor: '#fff' }}>
             MM
           </div>
         </header>
 
-        {/* Lime Green Hero Banner */}
-        <section style={{ backgroundColor: '#ccf255', borderRadius: '24px', padding: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', overflow: 'hidden', marginBottom: '1.5rem' }}>
-          <div style={{ maxWidth: '480px', zIndex: 2 }}>
-            <span style={{ display: 'inline-block', padding: '0.35rem 0.85rem', backgroundColor: 'rgba(0,0,0,0.06)', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '0.5px', marginBottom: '1.5rem' }}>
+        {/* Lime Green Banner */}
+        <section style={{ 
+          backgroundColor: '#cbf34a', 
+          borderRadius: '28px', 
+          padding: '3rem 3.5rem', 
+          display: 'flex', 
+          justify: 'space-between', 
+          alignItems: 'center', 
+          position: 'relative', 
+          overflow: 'hidden', 
+          marginBottom: '1.75rem',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
+        }}>
+          <div style={{ maxWidth: '460px', zIndex: 2 }}>
+            <span style={{ display: 'inline-block', padding: '0.4rem 0.9rem', backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: '20px', fontSize: '0.72rem', fontWeight: '800', letterSpacing: '0.8px', marginBottom: '1.75rem', color: '#1a1d1a' }}>
               YOUR PRIVATE KNOWLEDGE LAYER
             </span>
-            <h2 style={{ fontSize: '2.8rem', lineHeight: '1.1', fontWeight: '800', margin: '0 0 1rem 0', color: '#1a1d1a' }}>
+            <h2 style={{ fontSize: '3rem', lineHeight: '1.05', fontWeight: '800', margin: '0 0 1.25rem 0', color: '#1a1d1a', letterSpacing: '-1.5px' }}>
               Ask better questions of every document.
             </h2>
-            <p style={{ color: '#333', fontSize: '1rem', lineHeight: '1.5', marginBottom: '2rem' }}>
+            <p style={{ color: '#2d302d', fontSize: '0.98rem', lineHeight: '1.5', marginBottom: '2.25rem', fontWeight: '400' }}>
               Upload policies, reports, and internal notes. Atlas will find the relevant context and show you where every answer came from.
             </p>
             <button
               onClick={handleUploadClick}
               disabled={isUploading}
-              style={{ backgroundColor: '#1a1d1a', color: '#fff', border: 'none', padding: '0.85rem 1.5rem', borderRadius: '10px', fontWeight: 'bold', cursor: isUploading ? 'not-allowed' : 'pointer', fontSize: '0.95rem' }}
+              style={{ backgroundColor: '#1a1d1a', color: '#fff', border: 'none', padding: '0.9rem 1.6rem', borderRadius: '12px', fontWeight: '700', cursor: isUploading ? 'not-allowed' : 'pointer', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
               {isUploading ? 'Uploading...' : 'Upload a document ↗'}
             </button>
           </div>
 
-          {/* Decorative Orbital Target Graphic */}
-          <div style={{ width: '280px', height: '280px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '260px', height: '260px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.15)', position: 'absolute' }}></div>
-            <div style={{ width: '180px', height: '180px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.15)', position: 'absolute' }}></div>
-            <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.15)', position: 'absolute' }}></div>
-            <div style={{ width: '54px', height: '54px', backgroundColor: '#1a1d1a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ccf255', zIndex: 3 }}>
+          {/* Orbital Diagram */}
+          <div style={{ width: '300px', height: '300px', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: '280px', height: '280px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.12)', position: 'absolute' }}></div>
+            <div style={{ width: '190px', height: '190px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.12)', position: 'absolute' }}></div>
+            <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '1px solid rgba(0,0,0,0.12)', position: 'absolute' }}></div>
+            <div style={{ width: '56px', height: '56px', backgroundColor: '#1a1d1a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#cbf34a', zIndex: 3, fontSize: '1.2rem' }}>
               ✦
             </div>
-            <span style={{ position: 'absolute', top: '25px', right: '40px', backgroundColor: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>Context</span>
-            <span style={{ position: 'absolute', left: '10px', top: '110px', backgroundColor: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>Answers</span>
-            <span style={{ position: 'absolute', bottom: '25px', right: '10px', backgroundColor: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 'bold' }}>Sources</span>
+            <span style={{ position: 'absolute', top: '30px', right: '45px', backgroundColor: '#ffffff', padding: '3px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: '700', color: '#1a1d1a', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>Context</span>
+            <span style={{ position: 'absolute', left: '12px', top: '120px', backgroundColor: '#ffffff', padding: '3px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: '700', color: '#1a1d1a', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>Answers</span>
+            <span style={{ position: 'absolute', bottom: '30px', right: '15px', backgroundColor: '#ffffff', padding: '3px 10px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: '700', color: '#1a1d1a', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>Sources</span>
           </div>
         </section>
 
-        {/* Stats Row */}
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
-          <div style={{ backgroundColor: '#fff', padding: '1.5rem', borderRadius: '16px', border: '1px solid #eaeaea' }}>
-            <h4 style={{ margin: 0, fontSize: '0.75rem', color: '#888', fontWeight: 'bold' }}>DOCUMENTS</h4>
-            <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '0.5rem 0', color: '#1a1d1a' }}>{selectedFile ? '1' : '0'}</p>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#888' }}>{selectedFile ? selectedFile.name : 'Upload your first source'}</p>
+        {/* Stats Section */}
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '1.75rem' }}>
+          <div style={{ backgroundColor: '#ffffff', padding: '1.75rem', borderRadius: '20px', border: '1px solid #e8e6e0' }}>
+            <h4 style={{ margin: 0, fontSize: '0.72rem', color: '#808480', fontWeight: '700', letterSpacing: '0.5px' }}>DOCUMENTS</h4>
+            <p style={{ fontSize: '2.2rem', fontWeight: '800', margin: '0.6rem 0 0.4rem 0', color: '#1a1d1a', letterSpacing: '-0.5px' }}>{selectedFile ? '1' : '0'}</p>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: '#808480' }}>{selectedFile ? selectedFile.name : 'Upload your first source'}</p>
           </div>
-          <div style={{ backgroundColor: '#fff', padding: '1.5rem', borderRadius: '16px', border: '1px solid #eaeaea' }}>
-            <h4 style={{ margin: 0, fontSize: '0.75rem', color: '#888', fontWeight: 'bold' }}>CONVERSATIONS</h4>
-            <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '0.5rem 0', color: '#1a1d1a' }}>0</p>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#888' }}>Your questions will live here</p>
+          <div style={{ backgroundColor: '#ffffff', padding: '1.75rem', borderRadius: '20px', border: '1px solid #e8e6e0' }}>
+            <h4 style={{ margin: 0, fontSize: '0.72rem', color: '#808480', fontWeight: '700', letterSpacing: '0.5px' }}>CONVERSATIONS</h4>
+            <p style={{ fontSize: '2.2rem', fontWeight: '800', margin: '0.6rem 0 0.4rem 0', color: '#1a1d1a', letterSpacing: '-0.5px' }}>0</p>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: '#808480' }}>Your questions will live here</p>
           </div>
-          <div style={{ backgroundColor: '#fff', padding: '1.5rem', borderRadius: '16px', border: '1px solid #eaeaea' }}>
-            <h4 style={{ margin: 0, fontSize: '0.75rem', color: '#888', fontWeight: 'bold' }}>SOURCES CITED</h4>
-            <p style={{ fontSize: '2rem', fontWeight: 'bold', margin: '0.5rem 0', color: '#1a1d1a' }}>—</p>
-            <p style={{ margin: 0, fontSize: '0.85rem', color: '#888' }}>Grounded answers, not guesses</p>
+          <div style={{ backgroundColor: '#ffffff', padding: '1.75rem', borderRadius: '20px', border: '1px solid #e8e6e0' }}>
+            <h4 style={{ margin: 0, fontSize: '0.72rem', color: '#808480', fontWeight: '700', letterSpacing: '0.5px' }}>SOURCES CITED</h4>
+            <p style={{ fontSize: '2.2rem', fontWeight: '800', margin: '0.6rem 0 0.4rem 0', color: '#1a1d1a', letterSpacing: '-0.5px' }}>—</p>
+            <p style={{ margin: 0, fontSize: '0.85rem', color: '#808480' }}>Grounded answers, not guesses</p>
           </div>
         </section>
 
-        {/* Empty State Banner */}
-        <section style={{ backgroundColor: '#fff', borderRadius: '16px', border: '1px dashed #ccc', padding: '1.5rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Start Here Card */}
+        <section style={{ backgroundColor: '#ffffff', borderRadius: '20px', border: '1px dashed #d0cecf', padding: '1.75rem 2.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <div style={{ width: '40px', height: '40px', backgroundColor: '#f0f0f0', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', color: '#666' }}>+</div>
+            <div style={{ width: '44px', height: '44px', backgroundColor: '#f2f0ea', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', color: '#555', fontWeight: '400' }}>+</div>
             <div>
-              <span style={{ fontSize: '0.7rem', fontWeight: 'bold', color: '#888', display: 'block' }}>START HERE</span>
-              <h3 style={{ margin: '0.2rem 0', fontSize: '1.1rem', fontWeight: 'bold', color: '#1a1d1a' }}>Build your first source library</h3>
-              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Add a PDF or text document to make this workspace useful. The processing pipeline will extract, chunk, and index it for chat.</p>
+              <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#808480', letterSpacing: '0.5px', display: 'block', marginBottom: '0.2rem' }}>START HERE</span>
+              <h3 style={{ margin: '0 0 0.3rem 0', fontSize: '1.15rem', fontWeight: '800', color: '#1a1d1a' }}>Build your first source library</h3>
+              <p style={{ margin: 0, fontSize: '0.88rem', color: '#666', maxWidth: '600px' }}>Add a PDF or text document to make this workspace useful. The processing pipeline will extract, chunk, and index it for chat.</p>
             </div>
           </div>
           <button
             onClick={handleUploadClick}
             disabled={isUploading}
-            style={{ backgroundColor: '#eaeaea', color: '#333', border: 'none', padding: '0.75rem 1.25rem', borderRadius: '8px', fontWeight: 'bold', cursor: isUploading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap' }}
+            style={{ backgroundColor: '#e8e6e0', color: '#1a1d1a', border: 'none', padding: '0.85rem 1.4rem', borderRadius: '10px', fontWeight: '700', cursor: isUploading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', fontSize: '0.88rem' }}
           >
             Choose a file
           </button>
@@ -165,7 +206,7 @@ export default function App() {
 
         {/* Upload Status Banner */}
         {uploadStatus && (
-          <div style={{ marginTop: '1.5rem', padding: '1rem', backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #ddd', color: '#1a1d1a', fontWeight: 'bold' }}>
+          <div style={{ marginTop: '1.5rem', padding: '1rem 1.5rem', backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #e8e6e0', color: '#1a1d1a', fontWeight: '700', fontSize: '0.9rem' }}>
             {uploadStatus}
           </div>
         )}
