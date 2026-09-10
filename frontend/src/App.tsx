@@ -1,95 +1,88 @@
-const highlights = [
-  { label: "Documents", value: "0", detail: "Upload your first source" },
-  { label: "Conversations", value: "0", detail: "Your questions will live here" },
-  { label: "Sources cited", value: "—", detail: "Grounded answers, not guesses" },
-];
+import React, { useRef, useState } from 'react';
 
-function App() {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://ai-business-assistant-platform.onrender.com';
+
+export default function App() {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>('');
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  // Triggers hidden <input type="file" />
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Handles file selection and sends request to backend
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    setIsUploading(true);
+    setUploadStatus('Uploading document...');
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUploadStatus(`Success: ${file.name} uploaded successfully!`);
+        console.log('Upload response:', data);
+      } else {
+        setUploadStatus(`Upload failed with status code ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setUploadStatus('Network error: Could not reach backend server.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
-    <main className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <span className="brand-mark">A</span>
-          <span>Atlas Assist</span>
-        </div>
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1>AI Business Assistant</h1>
 
-        <nav aria-label="Primary navigation">
-          <a className="nav-item active" href="#workspace">
-            <span>✦</span>
-            Workspace
-          </a>
-          <a className="nav-item" href="#documents">
-            <span>▤</span>
-            Documents
-          </a>
-          <a className="nav-item" href="#history">
-            <span>◷</span>
-            History
-          </a>
-        </nav>
+      {/* Hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+        accept=".pdf,.txt,.docx"
+      />
 
-        <div className="sidebar-footer">
-          <div className="status-dot" />
-          <span>Local workspace</span>
-        </div>
-      </aside>
+      {/* Primary Hero Upload Button */}
+      <button
+        onClick={handleUploadClick}
+        disabled={isUploading}
+        style={{
+          padding: '12px 24px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          borderRadius: '8px',
+          backgroundColor: '#000',
+          color: '#fff',
+          border: 'none',
+        }}
+      >
+        {isUploading ? 'Uploading...' : 'Upload a document ↗'}
+      </button>
 
-      <section className="content" id="workspace">
-        <header className="topbar">
-          <div>
-            <p className="eyebrow">AI BUSINESS ASSISTANT</p>
-            <h1>Make sense of the work.</h1>
-          </div>
-          <button className="avatar" aria-label="Open account menu">
-            MM
-          </button>
-        </header>
-
-        <section className="hero-card">
-          <div className="hero-copy">
-            <span className="pill">Your private knowledge layer</span>
-            <h2>Ask better questions of every document.</h2>
-            <p>
-              Upload policies, reports, and internal notes. Atlas will find the
-              relevant context and show you where every answer came from.
-            </p>
-            <button className="primary-button">Upload a document <span>↗</span></button>
-          </div>
-          <div className="hero-orbit" aria-hidden="true">
-            <div className="orbit orbit-one" />
-            <div className="orbit orbit-two" />
-            <div className="orbit-core">✦</div>
-            <span className="orbit-label label-one">Context</span>
-            <span className="orbit-label label-two">Answers</span>
-            <span className="orbit-label label-three">Sources</span>
-          </div>
-        </section>
-
-        <section className="stats" aria-label="Workspace summary">
-          {highlights.map((item) => (
-            <article className="stat-card" key={item.label}>
-              <p>{item.label}</p>
-              <strong>{item.value}</strong>
-              <span>{item.detail}</span>
-            </article>
-          ))}
-        </section>
-
-        <section className="empty-state" id="documents">
-          <div className="empty-icon">＋</div>
-          <div>
-            <p className="eyebrow">START HERE</p>
-            <h3>Build your first source library</h3>
-            <p className="muted">
-              Add a PDF or text document to make this workspace useful. The
-              processing pipeline will extract, chunk, and index it for chat.
-            </p>
-          </div>
-          <button className="secondary-button">Choose a file</button>
-        </section>
-      </section>
-    </main>
+      {/* Status Output */}
+      {uploadStatus && (
+        <p style={{ marginTop: '1rem', color: isUploading ? '#666' : '#000' }}>
+          {uploadStatus}
+        </p>
+      )}
+    </div>
   );
 }
-
-export default App;

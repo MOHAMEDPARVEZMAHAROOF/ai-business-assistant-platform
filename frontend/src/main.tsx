@@ -1,40 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css'; // Remove or comment out this line if you don't have an index.css file
 
-export function Dashboard() {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    console.log("Selected file:", file);
-    // Call your upload API function here (e.g., uploadDocument(file))
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
-  };
-
-  return (
-    <div>
-      {/* Hidden file input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileSelect}
-        style={{ display: 'none' }}
-        accept=".pdf,.txt,.docx"
-      />
-
-      {/* Main Hero Upload Button */}
-      <button className="primary-button" onClick={triggerFileInput}>
-        Upload a document ↗
-      </button>
-
-      {/* Lower Empty State Button */}
-      <button className="secondary-button" onClick={triggerFileInput}>
-        Choose a file
-      </button>
-    </div>
-  );
-}
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
