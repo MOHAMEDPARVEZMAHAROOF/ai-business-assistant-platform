@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
-// Type assertion avoids the TypeScript 'Property env does not exist on type ImportMeta' build error
-const API_BASE_URL = ((import.meta as unknown) as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL || 'https://ai-business-assistant-platform.onrender.com';
+// Type cast import.meta to prevent TS2339 build failure on Vercel
+const API_BASE_URL = ((import.meta as any).env?.VITE_API_BASE_URL) || 'https://ai-business-assistant-platform.onrender.com';
 
 export default function App() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -9,12 +9,10 @@ export default function App() {
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  // Triggers hidden file input element
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
-  // Handles document selection and posts form data to FastAPI backend
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -41,7 +39,7 @@ export default function App() {
       }
     } catch (error) {
       console.error('Error uploading file:', error);
-      setUploadStatus('Network error: Unable to reach the backend server.');
+      setUploadStatus('Network error: Unable to reach backend server.');
     } finally {
       setIsUploading(false);
     }
@@ -51,7 +49,6 @@ export default function App() {
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>AI Business Assistant</h1>
 
-      {/* Hidden file input element */}
       <input
         type="file"
         ref={fileInputRef}
@@ -60,7 +57,6 @@ export default function App() {
         accept=".pdf,.txt,.docx"
       />
 
-      {/* Action Button */}
       <button
         onClick={handleUploadClick}
         disabled={isUploading}
@@ -78,7 +74,6 @@ export default function App() {
         {isUploading ? 'Uploading...' : 'Upload a document ↗'}
       </button>
 
-      {/* Output Status Message */}
       {uploadStatus && (
         <p style={{ marginTop: '1rem', color: isUploading ? '#666' : '#000' }}>
           {uploadStatus}
