@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+.pythonlibs/
+
+# Environment and local data
+.env
+.env.*
+!.env.example
+*.sqlite3
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+
+# Test and coverage output
+htmlcov/
+.coverage
+coverage.xml
