@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://ai-business-assistant-platform.onrender.com';
+// Type assertion avoids the TypeScript 'Property env does not exist on type ImportMeta' build error
+const API_BASE_URL = ((import.meta as unknown) as { env?: { VITE_API_BASE_URL?: string } }).env?.VITE_API_BASE_URL || 'https://ai-business-assistant-platform.onrender.com';
 
 export default function App() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -8,19 +9,19 @@ export default function App() {
   const [uploadStatus, setUploadStatus] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  // Triggers hidden <input type="file" />
+  // Triggers hidden file input element
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
 
-  // Handles file selection and sends request to backend
+  // Handles document selection and posts form data to FastAPI backend
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setSelectedFile(file);
     setIsUploading(true);
-    setUploadStatus('Uploading document...');
+    setUploadStatus(`Uploading ${file.name}...`);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -40,7 +41,7 @@ export default function App() {
       }
     } catch (error) {
       console.error('Error uploading file:', error);
-      setUploadStatus('Network error: Could not reach backend server.');
+      setUploadStatus('Network error: Unable to reach the backend server.');
     } finally {
       setIsUploading(false);
     }
@@ -50,7 +51,7 @@ export default function App() {
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>AI Business Assistant</h1>
 
-      {/* Hidden file input */}
+      {/* Hidden file input element */}
       <input
         type="file"
         ref={fileInputRef}
@@ -59,7 +60,7 @@ export default function App() {
         accept=".pdf,.txt,.docx"
       />
 
-      {/* Primary Hero Upload Button */}
+      {/* Action Button */}
       <button
         onClick={handleUploadClick}
         disabled={isUploading}
@@ -67,7 +68,7 @@ export default function App() {
           padding: '12px 24px',
           fontSize: '16px',
           fontWeight: 'bold',
-          cursor: 'pointer',
+          cursor: isUploading ? 'not-allowed' : 'pointer',
           borderRadius: '8px',
           backgroundColor: '#000',
           color: '#fff',
@@ -77,7 +78,7 @@ export default function App() {
         {isUploading ? 'Uploading...' : 'Upload a document ↗'}
       </button>
 
-      {/* Status Output */}
+      {/* Output Status Message */}
       {uploadStatus && (
         <p style={{ marginTop: '1rem', color: isUploading ? '#666' : '#000' }}>
           {uploadStatus}
