@@ -126,7 +126,7 @@ export default function App() {
           borderRadius: '28px', 
           padding: '3rem 3.5rem', 
           display: 'flex', 
-          justify: 'space-between', 
+          justifyContent: 'space-between', 
           alignItems: 'center', 
           position: 'relative', 
           overflow: 'hidden', 
